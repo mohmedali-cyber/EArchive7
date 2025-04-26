@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بحث وعرض الشركات</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    
+    
+    
+    <style>
+			span { color: blue; }
+		</style>
+    
+    
+    
+    <style>
+        body {
+            direction: rtl; /* يغير اتجاه النصوص */
+            text-align: right; /* يضبط المحاذاة */
+        }
+
+        /* تنسيق الخلفية عند تكبير الصورة */
+        #imageOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        /* تنسيق الصورة المكبرة */
+        #imageOverlay img {
+            max-width: 90vw;
+            max-height: 90vh;
+            object-fit: contain;
+            border: 5px solid rgb(64, 128, 128);
+            border-radius: 10px;
+        }
+
+        /* زر الإغلاق */
+        #closeOverlay {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 30px;
+            color: rgb(255, 0, 0);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* تنسيق حاوية النتائج */
+        .results-container {
+            display: flex;
+            flex-wrap: wrap; /* للسماح بتغليف العناصر */
+            gap: 20px; /* المسافة بين العناصر */
+            justify-content: center; /* لمركزة المحتوى */
+        }
+
+        /* تنسيق كل سجل */
+        .record {
+            width: 23%; /* 4 صور في الصف */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+
+        /* تنسيق الصور */
+        .record img {
+            max-width: 100%; /* ليتناسب مع عرض السجل */
+            cursor: pointer;
+        }
+
+        /* تأثير عند تمرير الماوس فوق الصفوف */
+        .table-hover tbody tr:hover {
+            background-color: #f0f8ff; /* لون فاتح */
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        /* تأثير عند التركيز على حقل البحث */
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+        
+        
+        .card {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: #f9f9f9;
+    padding: 15px;
+    margin: 15px;
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+}
+.card:hover {
+    transform: scale(1.03);
+}
+.company-name {
+    color: #004085;
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+.image-gallery img {
+    border-radius: 5px;
+    transition: transform 0.2s;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+.image-gallery img:hover {
+    transform: scale(1.2);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* تكبير الصور عند تمرير الماوس */
+.image-gallery img {
+    transition: transform 0.3s ease-in-out;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+
+.image-gallery img:hover {
+    transform: scale(1.2); /* تكبير الصورة */
+    cursor: pointer;
+}
+
+/* نافذة تكبير الصورة */
+#imageOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    display: none; /* مخفي افتراضيًا */
+}
+
+#imageOverlay img {
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+    border: 5px solid #fff;
+    border-radius: 10px;
+}
+
+/* زر الإغلاق */
+#closeOverlay {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 30px;
+    color: white;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+
+
+
+
+
+    </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Bootstrap Bundle JS (يحتوي على Popper أيضًا) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+
+<center>
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJvx2DbwqubWZe9dornV-C_qM5VW6AAcmNyA&s" alt="Logo">
+</center>
+
+
+
+<br><br><br>
+
+
+
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: rgb(64, 128, 120);">
+    <div class="container-fluid">
+
+        <!-- زر إظهار القائمة في الجوال -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav" aria-controls="navbarNav"
+                aria-expanded="false" aria-label="تبديل التنقل">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- عناصر القائمة -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto text-end">
+                <li class="nav-item">
+                    <a class="nav-link text-white fw-semibold" th:href="@{/}">
+                       اضافة 
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white fw-semibold" th:href="@{/archive/index3}">
+                        البحث
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+
+
+<br><br><br><br>
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+        $(document).ready(function() {
+            $("#searchQuery").keypress(function(event) {
+                if (event.which === 13) { // 13 هو كود زر Enter
+                    event.preventDefault(); // منع إعادة تحميل الصفحة
+                    searchRecords(); // استدعاء دالة البحث
+                }
+            });
+        });
+
+        function searchRecords() {
+            let query = $("#searchQuery").val().trim();
+            if (query === "") return; // منع البحث في حالة الإدخال الفارغ
+
+            $.ajax({
+                type: "GET",
+                url: "/archive/searche",
+                data: { query: query },
+                success: function(data) {
+                    let resultsContainer = $("#resultsContainer");
+                    resultsContainer.empty(); // مسح النتائج السابقة
+
+                    if (data.length === 0) {
+                        resultsContainer.append('<p>لا توجد نتائج.</p>'); // رسالة في حالة عدم وجود نتائج
+                        return;
+                    }
+
+                    data.forEach(record => {
+                        function getImageSrc(imageData) {
+                            return imageData ? `data:image/jpeg;base64,${imageData}` : '';
+                        }
+let recordHtml = `  
+    <div class="record mb-3">
+        <h5 class="company-name">${record.companyName}</h5>  
+        <p><strong>الرمز الإحصائي:</strong> <span class="red-text">${record.statisticalNumber}</span></p>
+        <p><strong>اسم المفوض:</strong> ${record.commissionername}</p>
+        <p><strong>الرقم الوطني:</strong> ${record.nationalId}</p>
+
+        <div class="image-gallery d-flex justify-content-between flex-wrap">
+            <div>${getImageSrc(record.taxFile) ? `<img src="${getImageSrc(record.taxFile)}" class="img-thumbnail" width="120" onclick="openImage('${getImageSrc(record.taxFile)}')">` : 'لا يوجد'}</div>
+            <div>${getImageSrc(record.commercialFile) ? `<img src="${getImageSrc(record.commercialFile)}" class="img-thumbnail" width="120" onclick="openImage('${getImageSrc(record.commercialFile)}')">` : 'لا يوجد'}</div>
+            <div>${getImageSrc(record.license) ? `<img src="${getImageSrc(record.license)}" class="img-thumbnail" width="120" onclick="openImage('${getImageSrc(record.license)}')">` : 'لا يوجد'}</div>
+            <div>${getImageSrc(record.identificationFile) ? `<img src="${getImageSrc(record.identificationFile)}" class="img-thumbnail" width="120" onclick="openImage('${getImageSrc(record.identificationFile)}')">` : 'لا يوجد'}</div>
+            <div>${getImageSrc(record.chamberofcommerce) ? `<img src="${getImageSrc(record.chamberofcommerce)}" class="img-thumbnail" width="120" onclick="openImage('${getImageSrc(record.chamberofcommerce)}')">` : 'لا يوجد'}</div>
+            <div>${getImageSrc(record.nationalnumber) ? `<img src="${getImageSrc(record.nationalnumber)}" class="img-thumbnail" width="120" onclick="openImage('${getImageSrc(record.nationalnumber)}')">` : 'لا يوجد'}</div>
+            <div>${getImageSrc(record.statisticsmodel) ? `<img src="${getImageSrc(record.statisticsmodel)}" class="img-thumbnail" width="120" onclick="openImage('${getImageSrc(record.statisticsmodel)}')">` : 'لا يوجد'}</div>
+            <div>${getImageSrc(record.importers) ? `<img src="${getImageSrc(record.importers)}" class="img-thumbnail" width="120" onclick="openImage('${getImageSrc(record.importers)}')">` : 'لا يوجد سجل مستوردين'}</div>
+            <div>${getImageSrc(record.industrial) ? `<img src="${getImageSrc(record.industrial)}" class="img-thumbnail" width="120" onclick="openImage('${getImageSrc(record.industrial)}')">` : 'لا يوجد سجل صناعي'}</div>
+        </div>
+
+        <!-- زر التعديل -->
+<button class="btn btn-primary edit-btn" data-id="${record.id}">تعديل</button>
+    </div>
+`;
+
+resultsContainer.append(recordHtml);
+
+
+                    });
+
+                },
+                error: function() {
+                    alert("حدث خطأ أثناء البحث.");
+                }
+            });
+            
+    
+                      
+    
+
+
+
+
+document.body.addEventListener("click", function (event) {
+    if (event.target.classList.contains("edit-btn")) {
+        console.log("زر التعديل تم الضغط عليه");
+        let companyId = event.target.getAttribute("data-id");
+        console.log("Company ID:", companyId);
+        if (companyId && companyId !== "undefined") {
+            window.location.href = "/archive/edit-company/" + companyId; // تأكد من أن هذا المسار صحيح
+        } else {
+            alert("خطأ: رقم الشركة غير موجود.");
+        }
+    }
+});
+
+    }
+
+                
+                
+                
+
+
+
+
+
+        // فتح الصورة بحجم الشاشة
+        function openImage(src) {
+            let overlay = document.createElement("div");
+            overlay.id = "imageOverlay";
+
+            let img = document.createElement("img");
+            img.src = src;
+
+            let closeBtn = document.createElement("button");
+            closeBtn.id = "closeOverlay";
+            closeBtn.innerText = "×";
+            closeBtn.onclick = function () {
+                document.body.removeChild(overlay);
+            };
+
+            overlay.appendChild(img);
+            overlay.appendChild(closeBtn);
+            document.body.appendChild(overlay);
+        }
+        
+        
+        
+        
+        // فتح الصورة في وضع الشاشة الكاملة
+function openImage(src) {
+    let overlay = document.getElementById("imageOverlay");
+    let img = document.getElementById("overlayImage");
+
+    img.src = src;
+    overlay.style.display = "flex"; // إظهار الصورة
+}
+
+// إغلاق الصورة
+function closeImage() {
+    document.getElementById("imageOverlay").style.display = "none";
+}
+
+
+
+
+function editRecord(recordId) {
+    window.location.href = "/archive/edit/" + recordId;
+}
+
+    </script>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <style>
+    .red-text {
+        color: red; /* تغيير لون النص إلى الأحمر */
+    }
+</style>
+
+
+<style>
+    .company-name {
+        color: rgb(0, 64, 128); /* تغيير لون النص إلى الأحمر */
+        font-size: 1.5rem; /* حجم خط أكبر */
+        font-weight: bold; /* نص غامق */
+    }
+</style>
+
+
+</head>
+
+<body>
+<br><br><br><br>
+
+<!-- نافذة تكبير الصورة -->
+<div id="imageOverlay">
+    <button id="closeOverlay" onclick="closeImage()">×</button>
+    <img id="overlayImage" src="">
+</div>
+
+
+
+
+<!--
+<div class="text-center my-4">
+    <div class="p-3 text-white fw-bold rounded-3" 
+         style="background-color: #004085; font-size: 20px; display: inline-block; width: 50%;">
+           الأرشيف  الالكتروني الرمز الإحصائي بنغازي
+    </div>
+</div>
+<-->
+
+<br><br>
+
+ <div class="container">
+        <h2 id="animatedHeading" class="text-center mt-4" style="color: #28a745; font-family: 'Cairo', sans-serif; font-weight: bold; text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);">
+            <b>عرض وتعديل بيانات الجهات</b>
+        </h2>
+    </div>
+
+
+<br><br>
+
+
+
+
+
+
+
+<!-- حقل البحث مع تحسين الشكل -->
+<div class="d-flex justify-content-center">
+    <div class="input-group mb-4 shadow-sm" style="width: 50%;">
+        <input type="text" id="searchQuery" class="form-control rounded-start border-primary" 
+               placeholder="🔍 ادخل الرمز الاحصائي" style="font-size: 1.1rem;">
+        <button onclick="searchRecords()" class="btn btn-outline-primary px-4">
+            <i class="fas fa-search"></i> بحث
+        </button>
+    </div>
+</div>
+
+
+
+<center>
+<!-- عرض نتائج البحث -->
+<div id="resultsContainer" class="results-container">
+    <p class="text-muted">لا توجد بيانات للعرض</p>
+</div>
+
+
+
+
+</center>
+
+
+
+<br><br><br><br>
+
+
+
+
+</center>
+
+
+
+
+
+
+
+
+ 
+
+</body>
+</html>

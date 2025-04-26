@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>بحث وعرض الشركات</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body style="direction: rtl; font-family: 'Cairo', sans-serif; background-color: #f7f7f7;">
+
+    <!-- شعار -->
+    <div class="text-center mt-4">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJvx2DbwqubWZe9dornV-C_qM5VW6AAcmNyA&s" alt="Logo">
+    </div>
+
+    <!-- شريط التنقل -->
+    <nav class="navbar navbar-expand-lg navbar-dark mt-4" style="background-color: rgb(64, 128, 120);">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav" aria-controls="navbarNav"
+                    aria-expanded="false" aria-label="تبديل التنقل">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto text-end">
+                    <li class="nav-item">
+                        <a class="nav-link text-white fw-semibold" th:href="@{/archive/index2}">عرض وتعديل البيانات</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white fw-semibold" th:href="@{/}">إضافة</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- عنوان البحث -->
+    <h2 class="text-center mt-5 text-success" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">
+        <b>البحث بالاسم أو بالرمز</b>
+    </h2>
+
+    <!-- حقل البحث -->
+    <div class="d-flex justify-content-center mt-4">
+        <div class="input-group mb-4 shadow-sm" style="width: 50%;">
+            <input type="text" id="searchQuery" class="form-control rounded-start border-primary" 
+                   placeholder="🔍 أدخل الاسم أو الرمز الإحصائي" style="font-size: 1.1rem;">
+            <button onclick="searchRecords()" class="btn btn-outline-primary px-4">بحث</button>
+        </div>
+    </div>
+
+    <!-- نتائج البحث -->
+    <div class="container">
+        <div id="resultsContainer" class="text-center">
+            <p class="text-muted">لا توجد بيانات للعرض</p>
+        </div>
+    </div>
+
+    <!-- السكربت -->
+    <script>
+        $(document).ready(function() {
+            $("#searchQuery").keypress(function(event) {
+                if (event.which === 13) {
+                    event.preventDefault();
+                    searchRecords();
+                }
+            });
+        });
+
+        function searchRecords() {
+            let query = $("#searchQuery").val().trim();
+            if (query === "") return;
+
+            $.ajax({
+                type: "GET",
+                url: "/archive/search",
+                data: { query: query },
+                success: function(data) {
+                    let resultsContainer = $("#resultsContainer");
+                    resultsContainer.empty();
+
+                    if (data.length === 0) {
+                        resultsContainer.append(`<p class="text-danger fw-bold">لم يتم العثور على نتائج لـ: "<span class="text-dark">${query}</span>"</p>`);
+                        return;
+                    }
+
+                    let pageSize = 9;
+                    let currentPage = 1;
+                    let totalPages = Math.ceil(data.length / pageSize);
+
+                    function renderPage(page) {
+                        let start = (page - 1) * pageSize;
+                        let end = start + pageSize;
+                        let pageData = data.slice(start, end);
+
+                        let tableHtml = `
+                            <p class="text-success fw-bold mb-3">تم العثور على <span class="text-primary">${data.length}</span> جهات لـ: "<span class="text-dark">${query}</span>"</p>
+                            <table class="table table-striped table-bordered">
+                                <thead style="background-color: #0d6efd; color: white; text-align: center;">
+                                    <tr>
+                                        <th>اسم الشركة</th>
+                                        <th>الرمز الإحصائي</th>
+                                        <th>اسم المفوض</th>
+                                        <th>الرقم الوطني</th>
+                                    </tr>
+                                </thead>
+                                <tbody>`;
+
+                        pageData.forEach(record => {
+                            tableHtml += `
+                                <tr>
+                                    <td class="text-center align-middle">${record.companyName}</td> 
+                                    <td class="text-center align-middle">${record.statisticalNumber}</td>
+                                    <td class="text-center align-middle">${record.commissionername}</td>
+                                    <td class="text-center align-middle">${record.nationalId}</td>
+                                </tr>`;
+                        });
+
+                        tableHtml += `</tbody></table>`;
+
+                        // أزرار الصفحات
+                        let pagination = `<nav><ul class="pagination justify-content-center">`;
+                        for (let i = 1; i <= totalPages; i++) {
+                            pagination += `<li class="page-item ${i === page ? 'active' : ''}">
+                                <a class="page-link" href="#" onclick="goToPage(${i})">${i}</a>
+                            </li>`;
+                        }
+                        pagination += `</ul></nav>`;
+
+                        resultsContainer.html(tableHtml + pagination);
+                    }
+
+                    window.goToPage = function(page) {
+                        currentPage = page;
+                        renderPage(currentPage);
+                    }
+
+                    renderPage(currentPage);
+                },
+                error: function() {
+                    alert("حدث خطأ أثناء البحث.");
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>
