@@ -4,7 +4,18 @@ package com.example.EArchive7.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "db") // جدول أرشيف الشركات
+//@Table(name = "db") // جدول أرشيف الشركات
+
+
+@Table(
+	    name = "db",
+	    indexes = {
+	        @Index(name = "idx_company_name", columnList = "companyName"),
+	        @Index(name = "idx_statistical_number", columnList = "statisticalNumber"),
+	        @Index(name = "idx_national_id", columnList = "nationalId")
+	    }
+	)
+
 
 public class CompanyArchive {
     @Id
