@@ -331,10 +331,32 @@ body {
 
 
 
+<div class="mb-4">
+    <label class="form-label">نوع النشاط:</label>
+    <select id="activityType" class="form-select" onchange="toggleFields()">
+      <option value="">🔽 اختر نوع النشاط</option>
+
+        <option value="import">استيرادي</option>
+        <option value="industrial">صناعي</option>
+    </select>
+    <div id="noDocumentsMessage" class="text-danger mt-2">
+        لا توجد وثائق مطلوبة، يرجى اختيار نوع النشاط.
+    </div>
+</div>
+
+
+
+
+
+
+
+
 <form id="companyForm" class="mb-4 p-4 border rounded bg-white shadow-lg" enctype="multipart/form-data">
     <div class="row">
 
 			
+			
+		
 			
             <div class="col-md-6 mb-4">
                 <label class="form-label">اسم الجهة:</label>
@@ -355,6 +377,10 @@ body {
         </div>
 
 <br><br>
+
+
+
+<div id="allDocuments">
 
         <div class="row mb-4">
     <div class="col-md-6 mb-3">
@@ -420,7 +446,9 @@ body {
         <img id="statisticsModelPreview" src="" alt="معاينة نموذج الإحصاء" class="mt-3 img-fluid rounded border shadow" style="display: none; max-width: 100%; transition: transform 0.2s;">
     </div>
 
-    <div class="col-md-6 mb-3">
+
+<div class="col-md-6 mb-3" id="importersSection">
+  <!--  <div class="col-md-6 mb-3">  -->
         <label for="importersFile" class="form-label">سجل المستوردين:</label>
         <input type="file" id="importersFile" name="Importers" class="form-control" accept="image/*" onchange="handleFileSelect(event, 'importers')">
         <button type="button" class="btn btn-outline-danger mt-2" onclick="closeImage('importers')" style="position: relative; overflow: hidden;">
@@ -430,18 +458,19 @@ body {
     </div>
 </div>
 
-        
-            
-         <div class="col-md-6 mb-3">
+ <div class="col-md-6 mb-3" id="industrialSection">
+        <!-- <div class="col-md-6 mb-3">  -->
     <label for="industrialFile" class="form-label">سجل صناعي:</label>
     <input type="file"  id="industrialFile" name="industrial" class="form-control" accept="image/*" onchange="handleFileSelect(event, 'industrial')">
-<button type="button" class="btn btn-outline-danger mt-2" onclick="closeImage('industrial')" style="position: relative; overflow: hidden;">
+  <button type="button" class="btn btn-outline-danger mt-2" onclick="closeImage('industrial')" style="position: relative; overflow: hidden;">
     <i class="fas fa-times"></i> إغلاق
-</button>
+  </button>
     <img id="industrialPreview" src="" alt="معاينة السجل الصناعي" class="mt-3 img-preview" style="display: none; max-width: 100%;">
 </div>
 
 
+
+</div>
 
 <div class="text-center mt-4">
     <button type="button" class="btn btn-success ..." onclick="submitForm()">  
@@ -472,7 +501,6 @@ body {
 </div>
 
 
-    <h1>تالية محمد</h1>
 
 
 </script>
@@ -483,6 +511,47 @@ body {
 </div>
 
     
+    
+    
+    
+    
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("importersSection").style.display = "none";
+    document.getElementById("industrialSection").style.display = "none";
+    document.getElementById("allDocuments").style.display = "none";
+    document.getElementById("noDocumentsMessage").style.display = "block";
+});
+
+function toggleFields() {
+    var type = document.getElementById("activityType").value;
+    var importers = document.getElementById("importersSection");
+    var industrial = document.getElementById("industrialSection");
+    var allDocs = document.getElementById("allDocuments");
+    var message = document.getElementById("noDocumentsMessage");
+
+    if (type === "import") {
+        allDocs.style.display = "block";
+        importers.style.display = "block";
+        industrial.style.display = "none";
+        message.style.display = "none";
+    } else if (type === "industrial") {
+        allDocs.style.display = "block";
+        importers.style.display = "none";
+        industrial.style.display = "block";
+        message.style.display = "none";
+    } else {
+        allDocs.style.display = "none";
+        importers.style.display = "none";
+        industrial.style.display = "none";
+        message.style.display = "block";
+    }
+}
+</script>
+
+
+
+
     
 </body>
 </html>
