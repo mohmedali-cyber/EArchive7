@@ -338,6 +338,8 @@ body {
 
         <option value="import">استيرادي</option>
         <option value="industrial">صناعي</option>
+        <option value="ind">خدمي</option>
+
     </select>
     <div id="noDocumentsMessage" class="text-danger mt-2">
         لا توجد وثائق مطلوبة، يرجى اختيار نوع النشاط.
@@ -521,30 +523,40 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("industrialSection").style.display = "none";
     document.getElementById("allDocuments").style.display = "none";
     document.getElementById("noDocumentsMessage").style.display = "block";
+	
+	
+	
 });
 
 function toggleFields() {
-    var type = document.getElementById("activityType").value;
-    var importers = document.getElementById("importersSection");
-    var industrial = document.getElementById("industrialSection");
-    var allDocs = document.getElementById("allDocuments");
-    var message = document.getElementById("noDocumentsMessage");
+    var type = document.getElementById("activityType").value; // الحصول على نوع النشاط المختار
+    var importers = document.getElementById("importersSection"); // قسم المستوردين
+    var industrial = document.getElementById("industrialSection"); // قسم السجل الصناعي
+    var ind = document.getElementById("m"); // قسم الخدمي
+    var allDocs = document.getElementById("allDocuments"); // قسم جميع المستندات
+    var message = document.getElementById("noDocumentsMessage"); // رسالة لا توجد مستندات
 
+   
+
+    // إظهار الأقسام بناءً على نوع النشاط المختار
     if (type === "import") {
-        allDocs.style.display = "block";
-        importers.style.display = "block";
-        industrial.style.display = "none";
-        message.style.display = "none";
+        allDocs.style.display = "block"; // إظهار جميع المستندات
+        industrial.style.display = "none"; // إخفاء قسم السجل الصناعي
+        importers.style.display = "block"; // إظهار قسم المستوردين
+        message.style.display = "none"; // إخفاء رسالة لا توجد مستندات
     } else if (type === "industrial") {
-        allDocs.style.display = "block";
-        importers.style.display = "none";
-        industrial.style.display = "block";
-        message.style.display = "none";
+        allDocs.style.display = "block"; // إظهار جميع المستندات
+        industrial.style.display = "block"; // إظهار قسم السجل الصناعي
+        importers.style.display = "none"; // إخفاء قسم المستوردين
+        message.style.display = "none"; // إخفاء رسالة لا توجد مستندات
+    } else if (type === "ind") {
+        allDocs.style.display = "block"; // إظهار جميع المستندات
+        industrial.style.display = "none"; // إخفاء قسم السجل الصناعي
+        importers.style.display = "none"; // إخفاء قسم المستوردين
+        ind.style.display = "block"; // إظهار قسم الخدمي
+        message.style.display = "none"; // إخفاء رسالة لا توجد مستندات
     } else {
-        allDocs.style.display = "none";
-        importers.style.display = "none";
-        industrial.style.display = "none";
-        message.style.display = "block";
+        message.style.display = "block"; // إظهار رسالة لا توجد مستندات
     }
 }
 </script>
