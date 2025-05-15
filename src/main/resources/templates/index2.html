@@ -314,6 +314,9 @@ let recordHtml = `
         <div class="image-gallery d-flex justify-content-between flex-wrap">
             <div>${getImageSrc(record.taxFile) ? `<img src="${getImageSrc(record.taxFile)}" class="img-thumbnail" width="120" onclick="openImage('${getImageSrc(record.taxFile)}')">` : 'لا يوجد'}</div>
             <div>${getImageSrc(record.commercialFile) ? `<img src="${getImageSrc(record.commercialFile)}" class="img-thumbnail" width="120" onclick="openImage('${getImageSrc(record.commercialFile)}')">` : 'لا يوجد'}</div>
+            <div>${getImageSrc(record.commercialFile2) ? `<img src="${getImageSrc(record.commercialFile2)}" class="img-thumbnail" width="120" onclick="openImage('${getImageSrc(record.commercialFile2)}')">` : 'لا يوجد'}</div>
+
+           
             <div>${getImageSrc(record.license) ? `<img src="${getImageSrc(record.license)}" class="img-thumbnail" width="120" onclick="openImage('${getImageSrc(record.license)}')">` : 'لا يوجد'}</div>
             <div>${getImageSrc(record.identificationFile) ? `<img src="${getImageSrc(record.identificationFile)}" class="img-thumbnail" width="120" onclick="openImage('${getImageSrc(record.identificationFile)}')">` : 'لا يوجد'}</div>
             <div>${getImageSrc(record.chamberofcommerce) ? `<img src="${getImageSrc(record.chamberofcommerce)}" class="img-thumbnail" width="120" onclick="openImage('${getImageSrc(record.chamberofcommerce)}')">` : 'لا يوجد'}</div>
