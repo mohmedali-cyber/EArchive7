@@ -31,8 +31,10 @@ public class CompanyArchive {
     
     @Column(columnDefinition = "bytea")
    private byte[] commercialFile;//التجاري
-   // private List<byte[]> commercialFiles; // قائمة لتخزين الصور
 
+    @Column(columnDefinition = "bytea")
+    private byte[] commercialFile2;//2التجاري
+    
     @Column(columnDefinition = "bytea")
     private byte[] license;  //رخصة
     
@@ -118,6 +120,17 @@ public class CompanyArchive {
 	public void setCommercialFile(byte[] commercialFile) {
 		this.commercialFile = commercialFile;
 	}
+	
+	
+	
+	public byte[] getCommercialFile2() {
+		return commercialFile2;
+	}
+
+	public void setCommercialFile2(byte[] commercialFile2) {
+		this.commercialFile2 = commercialFile2;
+	}
+
 	public byte[] getLicense() {
 		return license;
 	}

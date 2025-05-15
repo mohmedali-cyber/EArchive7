@@ -69,7 +69,8 @@ public class CompanyController {
             @RequestParam("industrial") MultipartFile industrial, 
             @RequestParam("Importers") MultipartFile Importers,
             
-           @RequestParam("commercialFile") MultipartFile commercialFile){
+            @RequestParam("commercialFile") MultipartFile commercialFile,
+           @RequestParam("commercialFile2") MultipartFile commercialFile2){
     
     
     if (companyArchiveService.existsByStatisticalNumber(statisticalNumber)) {
@@ -94,6 +95,7 @@ public class CompanyController {
             companyArchive.setIndustrial(industrial.getBytes());
             companyArchive.setImporters(Importers.getBytes());
             companyArchive.setCommercialFile(commercialFile.getBytes());
+            companyArchive.setCommercialFile2(commercialFile2.getBytes());
 
             
 
