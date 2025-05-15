@@ -228,6 +228,8 @@ public class CompanyController {
             @RequestParam("commissionername") String commissionername,
             @RequestParam(value = "taxFile", required = false) MultipartFile taxFile,
             @RequestParam(value = "commercialFile", required = false) MultipartFile commercialFile,
+            @RequestParam(value = "commercialFile2", required = false) MultipartFile commercialFile2,
+
             @RequestParam(value = "license", required = false) MultipartFile license,
             @RequestParam(value = "chamberofcommerce", required = false) MultipartFile chamberofcommerce,
             @RequestParam(value = "Nationalnumber", required = false) MultipartFile Nationalnumber,
@@ -251,6 +253,10 @@ public class CompanyController {
                 }
                 if (commercialFile != null && !commercialFile.isEmpty()) {
                     companyArchive.setCommercialFile(commercialFile.getBytes());
+                }
+               
+                if (commercialFile2 != null && !commercialFile2.isEmpty()) {
+                    companyArchive.setCommercialFile2(commercialFile2.getBytes());
                 }
                 if (license != null && !license.isEmpty()) {
                     companyArchive.setLicense(license.getBytes());
